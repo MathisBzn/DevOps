@@ -9,6 +9,12 @@ L'utilisation des variables d'environnement permet de personnaliser une image do
 Un volume sert à sauvegarder les données. Ces dernières étant de base stockées dans le docker, lorsqu'il s'éteint, les données sont perdues.
 Avec un volume, les données sont stockées sur la machine qui host le docker.
 
+### 1-3 Document your database container essentials: commands and Dockerfile.
+
+`docker build -t <nom/nomImage> .` build l'image docker à partir du Dockerfile qui se trouve dans le répertoire courrant.
+`docker run -d -p 80:80 -v /data:/data --name <nom> --network <nom du network> <nom de l'image>` run l'image en dernier paramètre en mode détaché, avec une redirection de port, des volumes, un nom customisé et une connexion à un network.
+`docker ps` liste les containers actifs.
+
 ### 1-4 Why do we need a multistage build? And explain each step of this dockerfile.
 
 Le multistage build est utile pour faire les choses dans l'ordre, il faut que le build de l'application soit fait avant qu'elle ne soit exécutée.
@@ -42,8 +48,8 @@ Il est très important pour déployer des applications fonctionnant avec plusieu
 
 ### 1-7 Document docker-compose most important commands.
 
-`docker compose up -d --build`
-`docker ps`
+`docker compose up -d --build` lance le docker compose en mode détaché et en rebuildant les containers
+`docker ps` liste les containers actifs.
 
 ### 1-8 Document your docker-compose file.
 
@@ -51,15 +57,17 @@ Il est très important pour déployer des applications fonctionnant avec plusieu
 services:
     backend: # Nom du service back
         build: ./java # Emplacement du Dockerfile pour build
+        container_name: backendTP1 # Nom du container
         networks: # Les réseaux dans lequel le docker peut interragir
             - proxy-back
             - back-bdd
-        env_file: ".env"
+        env_file: ".env" # Lien vers le fichier .env qui contient les variables d'environement
         depends_on: # le nom du Docker qui doit être build avant celui-ci
             - database
 
     database:
         build: ./postgres
+        container_name: dbTP1
         networks:
             - back-bdd
         env_file: ".env"
@@ -68,6 +76,7 @@ services:
 
     httpd: 
         build: ./server
+        container_name: proxyTP1
         ports:
             - 80:80
         networks:
@@ -75,12 +84,16 @@ services:
         depends_on:
             - backend
 
-networks:
+networks: # Création des différents réseaux qui vont être utilisé.
     proxy-back:
     back-bdd:
 
 
 ```
+### 1-9 Document your publication commands and published images in dockerhub.
+
+`docker tag` Pour nommer correctement et versionner l'image.
+`docker push` Pour envoyer l'image sur le repo.
 
 ### 1-10 Why do we put our images into an online repo?
 
