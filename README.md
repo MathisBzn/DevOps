@@ -30,3 +30,7 @@ COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar # Copie l
 
 ENTRYPOINT ["java", "-jar", "myapp.jar"] # Run l'application.
 ```
+
+### 1-5 Why do we need a reverse proxy?
+
+Le reverse proxy sert à faire la redirection entre le serveur web et le back.
