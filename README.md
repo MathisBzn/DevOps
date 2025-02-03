@@ -54,10 +54,7 @@ services:
         networks: # Les réseaux dans lequel le docker peut interragir
             - proxy-back
             - back-bdd
-        environment:
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_DB=${POSTGRES_DB}
+        env_file: ".env"
         depends_on: # le nom du Docker qui doit être build avant celui-ci
             - database
 
@@ -65,10 +62,9 @@ services:
         build: ./postgres
         networks:
             - back-bdd
-        environment:
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_DB=${POSTGRES_DB}
+        env_file: ".env"
+        volumes:
+            - ./data:/var/lib/postgresql/data
 
     httpd: 
         build: ./server
