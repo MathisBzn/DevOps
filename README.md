@@ -1,5 +1,7 @@
 # DevOps
 
+## TP Docker
+
 ### 1-1 Why should we run the container with a flag -e to give the environment variables?
 
 L'utilisation des variables d'environnement permet de personnaliser une image docker sans la modifier.
@@ -99,3 +101,10 @@ networks: # Création des différents réseaux qui vont être utilisé.
 
 Les images qui sont en lignes sont utilisables sans avoir les fichiers qui ont build l'image.
 Tout le monde peut également profiter de l'utilisation des images présentes sur un repo online.
+
+## TP Github Actions
+
+### 2-1 What are testcontainers?
+
+Testcontainers est une librairie qui permet de simuler des instances légères de ce qui doit être run dans un docker
+
