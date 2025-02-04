@@ -136,3 +136,8 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
           cd java/simple-api-student-main
           mvn clean verify
 ```
+
+### 2-3 For what purpose do we need to push docker images?
+
+On a besoin de push les images pour les personnes qui veulent pull le projet sans avoir à build les images docker.
+Plus simple pour que le projet soit utilisable par le plus grand nombre.
