@@ -23,5 +23,20 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
         with:
           context: ./java
           tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push database
+        uses: docker/build-push-action@v3
+        with:
+          context: ./postgres
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
 
       
