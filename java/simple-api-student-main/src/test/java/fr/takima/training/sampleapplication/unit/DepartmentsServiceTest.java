@@ -33,6 +33,7 @@ class DepartmentsServiceTest {
         assertEquals(DEPARTMENT, departmentDAO.findDepartmentByName("aflenfj"));//DepartmentTest
     }
 
+    
     @Test
     void testGetDepartmentByNameWithNullValue() {
         assertThrows(IllegalArgumentException.class, () -> departmentService.getDepartmentByName(null));
