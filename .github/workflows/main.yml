@@ -33,7 +33,9 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=MathisBzn_DevOps
+        run: |
+              cd java/simple-api-student-main
+              mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=MathisBzn_DevOps
 
   test-backend: #Nom d'un job
     runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
