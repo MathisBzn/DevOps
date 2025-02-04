@@ -7,9 +7,27 @@ on: #Se déclenche au moment du ...
   pull_request:
 
 jobs: #Lorsqu'il se déclenche, run ces jobs
+  build-test:
+    name: Build and test
+    runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
+    steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21 #Nom de l'action
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto' #Distrib du docker sur lequel va run java
+          java-version: '21'
+
+      - name: Build and test with Maven
+        run: | #run les commandes suivantes unes après les autres.
+          cd java/simple-api-student-main
+          mvn clean verify
+
   test-backend:
-    name: Build and analyze
+    name: Sonar
     runs-on: ubuntu-latest
+    needs: build-test
     steps:
       - uses: actions/checkout@v4
 
