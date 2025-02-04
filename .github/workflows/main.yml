@@ -25,10 +25,6 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
         run: | #run les commandes suivantes unes après les autres.
           cd java/simple-api-student-main
           mvn clean verify
-      - name: Fail
-        run: |
-          echo "Vérification du code..."
-          exit 1
 
   test-backend:
     name: Sonar
