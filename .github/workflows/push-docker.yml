@@ -9,7 +9,6 @@ on: #Se déclenche au moment du ...
 jobs: #Lorsqu'il se déclenche, run ces jobs
   build-and-push-docker-image: #Nom d'un job
     runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
-    if: github.event.workflow_run.head_branch == 'main' # Vérifie si la branche est main
     steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
       - uses: actions/checkout@v4
 
@@ -23,19 +22,19 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
         uses: docker/build-push-action@v3
         with:
           context: ./java
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:latest #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
           context: ./postgres
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:latest #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
           context: ./server
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:latest #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
