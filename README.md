@@ -108,3 +108,31 @@ Tout le monde peut également profiter de l'utilisation des images présentes su
 
 Testcontainers est une librairie qui permet de simuler des instances légères de ce qui doit être run dans un docker
 
+### 2-2 Document your Github Actions configurations.
+
+```yml
+name: CI devops 2025 #Nom du workflow
+on: #Se déclenche au moment du ...
+  push: #push sur ...
+    branches: #Les branches qui sont listées ci-dessous.
+      - main
+      - develop
+  pull_request:
+
+jobs: #Lorsqu'il se déclenche, run ces jobs
+  test-backend: #Nom d'un job
+    runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
+    steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21 #Nom de l'action
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto' #Distrib du docker sur lequel va run java
+          java-version: '21'
+
+      - name: Build and test with Maven
+        run: | #run les commandes suivantes unes après les autres.
+          cd java/simple-api-student-main
+          mvn clean verify
+```
