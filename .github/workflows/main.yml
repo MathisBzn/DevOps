@@ -40,7 +40,7 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
   test-backend: #Nom d'un job
     runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
     steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       # - name: Build and test with Maven
       #   run: | #run les commandes suivantes unes après les autres.
