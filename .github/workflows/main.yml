@@ -38,6 +38,7 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
               mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=MathisBzn_DevOps
 
   test-backend: #Nom d'un job
+    needs: build
     runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
     steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
       - uses: actions/checkout@v4
