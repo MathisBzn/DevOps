@@ -1,11 +1,12 @@
 name: Push docker #Nom du workflow
-on: #Se déclenche au moment du ...
-  workflow_run: #push sur ...
-    workflows: [CI devops 2025]
-    types:
-      - completed
-    branches:
-      - 'main'
+on: push
+#Se déclenche au moment du ...
+  # workflow_run: #push sur ...
+  #   workflows: [CI devops 2025]
+  #   types:
+  #     - completed
+  #   branches:
+  #     - 'main'
 
 jobs: #Lorsqu'il se déclenche, run ces jobs
   build-and-push-docker-image: #Nom d'un job
@@ -29,19 +30,19 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
         uses: docker/build-push-action@v3
         with:
           context: ./java
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:${VERSION} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
           push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
           context: ./postgres
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:${VERSION} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
           push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
           context: ./server
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:${VERSION} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
           push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
