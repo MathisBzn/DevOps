@@ -141,3 +141,79 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
 
 On a besoin de push les images pour les personnes qui veulent pull le projet sans avoir à build les images docker.
 Plus simple pour que le projet soit utilisable par le plus grand nombre.
+
+### 2-4 Document your quality gate configuration.
+
+```yml
+name: CI devops 2025 #Nom du workflow
+on: #Se déclenche au moment du ...
+  push: #push sur ...
+    branches: #Les branches qui sont listées ci-dessous.
+      - main
+      - develop
+  pull_request:
+
+jobs: #Lorsqu'il se déclenche, run ces jobs
+  test-backend:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21 #Java 21
+          distribution: 'corretto'
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: | #On se déplace dans le bon dossier et on est avec sonar
+              cd java/simple-api-student-main 
+              mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=MathisBzn_DevOps
+
+  build-and-push-docker-image: #Nom d'un job
+    needs: test-backend
+    runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
+    steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3 #On se log à docker hub
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image and push backend
+        uses: docker/build-push-action@v3
+        with:
+          context: ./java
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push database
+        uses: docker/build-push-action@v3
+        with:
+          context: ./postgres
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+```
