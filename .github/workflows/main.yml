@@ -1,9 +1,9 @@
 name: CI devops 2025 #Nom du workflow
 on: #Se déclenche au moment du ...
-  push: #push sur ...
-    branches: #Les branches qui sont listées ci-dessous.
-      - main
-      - develop
+  # push: #push sur ...
+  #   branches: #Les branches qui sont listées ci-dessous.
+  #     - main
+  #     - develop
   pull_request:
     branches:
       - develop
