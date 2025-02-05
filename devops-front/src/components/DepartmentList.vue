@@ -4,7 +4,7 @@
       <a-col :xs="24" :sm="22" :md="12" :lg="8" :xl="5">
         <a-row class="department" v-for="department in departments" :key="department.id">
           <router-link :to="`/departments/${department.name}`">
-            <a-col :span="12">{{ department.id }}</a-col>
+            <a-col :span="12">aaaaaaaaaaaaaaaaaa{{ department.id }}</a-col>
             <a-col :span="12">{{ department.name }}</a-col>
           </router-link>
         </a-row>

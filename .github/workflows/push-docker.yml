@@ -1,94 +1,91 @@
 name: Push docker #Nom du workflow
 on: #Se déclenche au moment du ...
-  push: #push sur ...
-    branches: #Les branches qui sont listées ci-dessous.
-      - main
-  # workflow_run: #push sur ...
-  #   workflows: [CI devops 2025]
-  #   types:
-  #     - completed
-  #   branches:
-  #     - 'main'
+  workflow_run: #push sur ...
+    workflows: [CI devops 2025]
+    types:
+      - completed
+    branches:
+      - 'main'
 
 jobs: #Lorsqu'il se déclenche, run ces jobs
-  # build-and-push-docker-image: #Nom d'un job
-  #   runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
-  #   steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
-      # - uses: actions/checkout@v4
+  build-and-push-docker-image: #Nom d'un job
+    runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
+    steps: #Les différentes étapes du job. Chacune doit contenir un uses ou un run
+      - uses: actions/checkout@v4
 
-      # - name: Récupérer la version du POM
-      #   id: get_version
-      #   run: |
-      #       cd java/simple-api-student-main
-      #       VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-      #       CLEAN_VERSION=$(echo $VERSION | sed 's/-SNAPSHOT//')
-      #       echo "VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
+      - name: Récupérer la version du POM
+        id: get_version
+        run: |
+            cd java/simple-api-student-main
+            VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+            CLEAN_VERSION=$(echo $VERSION | sed 's/-SNAPSHOT//')
+            echo "VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
 
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v3 #On se log à docker hub
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3 #On se log à docker hub
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Build image and push backend
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./java
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push backend
+        uses: docker/build-push-action@v3
+        with:
+          context: ./java
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
-      # - name: Build image and push database
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./postgres
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push database
+        uses: docker/build-push-action@v3
+        with:
+          context: ./postgres
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
-      # - name: Build image and push httpd
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./server
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
-      # - name: Build image and push front
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./devops-front
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-front:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push front
+        uses: docker/build-push-action@v3
+        with:
+          context: ./devops-front
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-front:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
-      # - name: Build image and push backend latest
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./java
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push backend latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./java
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
-      # - name: Build image and push database latest
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./postgres
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push database latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./postgres
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
-      # - name: Build image and push httpd latest
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./server
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push httpd latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
-      # - name: Build image and push front latest
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./devops-front
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-front #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
-      #     push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+      - name: Build image and push front latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./devops-front
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-front #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
 
   run-ansible-playbook:
     runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
-    # needs: build-and-push-docker-image
+    needs: build-and-push-docker-image
     steps:
       - uses: actions/checkout@v4
 
@@ -108,13 +105,3 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
       - name: Exécuter le Playbook Ansible
         run: |
           ansible-playbook -i ansible/inventories/setup.yml ansible/inventories/playbook.yml
-      # - name: Run playbook
-      #   uses: dawidd6/action-ansible-playbook@v2
-      #   with:
-      #     # Required, playbook filepath
-      #     playbook: playbook.yml
-      #     directory: ansible/inventories/
-      #     key: ${{secrets.SSH_PRIVATE_KEY}}
-      #     inventory: |
-      #       [all]
-      #       mathis.bozon.takima.cloud
