@@ -1,0 +1,9 @@
+---
+# tasks file for roles/network
+- name: Create a network between database and api
+  docker_network:
+    name: db_api
+
+- name: Create a network between api and proxy
+  docker_network:
+    name: api_proxy
