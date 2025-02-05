@@ -4,6 +4,7 @@
   docker_container:
     name: httpd
     image: bubuuu/tp-httpd:latest
+    pull: yes
     exposed_ports:
       - "80"
     ports:
@@ -12,5 +13,3 @@
       - name: api_proxy
     container_default_behavior: compatibility
     networks_cli_compatible: no
-    comparisons:
-      image: ignore # do not restart containers with older versions of the image

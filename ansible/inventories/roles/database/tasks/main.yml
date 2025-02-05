@@ -4,6 +4,7 @@
   docker_container:
     name: database
     image: bubuuu/tp-postgres:latest
+    pull: yes
     volumes:
       - /data:/var/lib/postgresql/data
     env_file: /home/admin/.env
@@ -11,5 +12,3 @@
       - name: db_api
     container_default_behavior: compatibility
     networks_cli_compatible: no
-    comparisons:
-      image: ignore # do not restart containers with older versions of the image

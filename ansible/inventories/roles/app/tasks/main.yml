@@ -4,11 +4,10 @@
   docker_container:
     name: backend
     image: bubuuu/tp-devops-simple-api:latest
+    pull: yes
     env_file: /home/admin/.env
     networks:
       - name: db_api
       - name: api_proxy
     container_default_behavior: compatibility
     networks_cli_compatible: no
-    comparisons:
-      image: ignore # do not restart containers with older versions of the image
