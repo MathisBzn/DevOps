@@ -95,7 +95,7 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
 
       - name: Ajouter la clé SSH
         run: |
-          mkdir ~/.ssh
+          mkdir -p ~/.ssh
           echo "${{ secrets.ENV }}" > ~/.env
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
