@@ -94,8 +94,8 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
 
       - name: Ajouter la clé SSH
         run: |
-          sudo echo "${{ secrets.SSH_KEY }}" > /id_rsa
-          sudo chmod 400 /id_rsa
+          echo "${{ secrets.SSH_KEY }}" > ~/id_rsa
+          chmod 400 ~/id_rsa
 
       - name: Installer Ansible
         run: |
