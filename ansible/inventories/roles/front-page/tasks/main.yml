@@ -1,14 +1,12 @@
 ---
 # tasks file for roles/database
-- name: Run app
+- name: Run front
   docker_container:
-    name: backend
-    image: bubuuu/tp-devops-simple-api:latest
+    name: front
+    image: bubuuu/tp-front:latest
     pull: yes
     env_file: /home/admin/.env
     networks:
-      - name: db_api
-      # - name: api_proxy
       - name: api_front_proxy
     container_default_behavior: compatibility
     networks_cli_compatible: no

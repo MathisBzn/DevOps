@@ -10,6 +10,7 @@
     ports:
       - 80:80
     networks:
-      - name: api_proxy
+      # - name: api_proxy
+      - name: api_front_proxy
     container_default_behavior: compatibility
     networks_cli_compatible: no

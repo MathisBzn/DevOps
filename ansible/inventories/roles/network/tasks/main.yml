@@ -4,6 +4,10 @@
   docker_network:
     name: db_api
 
-- name: Create a network between api and proxy
+# - name: Create a network between api and proxy
+#   docker_network:
+#     name: api_proxy
+
+- name: Create a network between api, front and proxy
   docker_network:
-    name: api_proxy
+    name: api_front_proxy
