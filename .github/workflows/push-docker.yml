@@ -106,7 +106,7 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
 
       - name: Exécuter le Playbook Ansible
         run: |
-          ansible-playbook -i /ansible/inventories/inventory.ini /ansible/inventories/playbook.yml
+          ansible-playbook -i ansible/inventories/inventory.ini ansible/inventories/playbook.yml
       # - name: Run playbook
       #   uses: dawidd6/action-ansible-playbook@v2
       #   with:
