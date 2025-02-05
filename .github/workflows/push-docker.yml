@@ -1,4 +1,4 @@
-name: Push docker #Nom du workflow
+name: Push docker and deploy #Nom du workflow
 on: #Se déclenche au moment du ...
   workflow_run: #push sur ...
     workflows: [CI devops 2025]
@@ -89,12 +89,14 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
     steps:
       - uses: actions/checkout@v4
 
+      - uses: webfactory/ssh-agent@v0.9.0
+        with: 
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
       - name: Ajouter la clé SSH
         run: |
           mkdir ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/id_rsa
           echo "${{ secrets.ENV }}" > ~/.env
-          chmod 400 ~/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Installer Ansible
