@@ -96,6 +96,7 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
         run: |
           mkdir ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/id_rsa
+          echo "${{ secrets.ENV }}" > ~/.env
           chmod 400 ~/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
