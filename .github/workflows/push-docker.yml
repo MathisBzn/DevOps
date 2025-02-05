@@ -85,3 +85,35 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
           context: ./devops-front
           tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-front #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
           push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+
+  run-ansible-playbook:
+    runs-on: ubuntu-22.04 #Distrib sur laquelle va run le job
+    needs: build-and-push-docker-image
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ajouter la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Installer Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Exécuter le Playbook Ansible
+        run: |
+          ansible-playbook -i /ansible/inventories/inventory.ini /ansible/inventories/playbook.yml
+      # - name: Run playbook
+      #   uses: dawidd6/action-ansible-playbook@v2
+      #   with:
+      #     # Required, playbook filepath
+      #     playbook: playbook.yml
+      #     directory: ansible/inventories/
+      #     key: ${{secrets.SSH_PRIVATE_KEY}}
+      #     inventory: |
+      #       [all]
+      #       mathis.bozon.takima.cloud
