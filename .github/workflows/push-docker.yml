@@ -47,3 +47,38 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
           context: ./server
           tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
           push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+
+       - name: Build image and push front
+        uses: docker/build-push-action@v3
+        with:
+          context: ./devops-front
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-front:${{ env.VERSION }} #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+
+      - name: Build image and push backend latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./java
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops-simple-api #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+
+      - name: Build image and push database latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./postgres
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-postgres #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+
+      - name: Build image and push httpd latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.
+
+       - name: Build image and push front latest
+        uses: docker/build-push-action@v3
+        with:
+          context: ./devops-front
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-front #Nom de l'image qui doit commencer par le nom d'utilisateur du compte docker hub
+          push: ${{ github.ref == 'refs/heads/main' }} #Push attend un booléen, si le push à été effectué sur main, la valeur est true, false sinon.

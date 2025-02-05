@@ -217,3 +217,32 @@ jobs: #Lorsqu'il se déclenche, run ces jobs
           tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 ``` 
+
+## Ansible
+
+### 3-1 Document your inventory and base commands
+
+`ansible all -i inventories/setup.yml -m apt -a "name=apache2 state=absent" --become`
+`-i` pour mettre le lien vers le fichier d'inventaire
+`-m` nom du module que on veut executer
+`-a` arguments du module executé
+
+```yml
+all:
+ vars:
+   ansible_user: admin #User sur le serveur
+   ansible_ssh_private_key_file: /id_rsa #Lien vers la clé RSA
+ children:
+   prod: #Group d'hosts
+     hosts: mathis.bozon.takima.cloud #Host pour lequel on veut config
+```
+
+### 3-2 Document your playbook
+
+```yml
+- hosts: all #Fais pour tous les hosts qui sont dans le setup.yml; On peut mettre prod dans notre cas pour focus uniquement les hosts dans le groupe prod
+  gather_facts: true
+  become: true #Est root
+  roles: #Execute les données dans le role
+    - docker #Va executer les tasks présents dans roles/docker/tasks/main.yml
+```

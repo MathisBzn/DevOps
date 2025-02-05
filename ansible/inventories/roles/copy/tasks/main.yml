@@ -1,0 +1,6 @@
+---
+# tasks file for roles/copy
+- name: Copy .env
+  ansible.builtin.copy:
+    src: /mnt/c/Users/mathi/Documents/cours_CPE/Annee_2/S8/DevOps-CICD/DevOps/.env
+    dest: /home/admin
