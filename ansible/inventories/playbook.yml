@@ -4,10 +4,11 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
   roles:
-    # - docker
+    - docker
     - copy
     - network
     - database
     - app
     - proxy
     - front-page
+    - grafana

@@ -1,7 +1,17 @@
 services:
-    backend:
+    backend_1:
         build: ./java
         container_name: backendTP1
+        networks:
+            - proxy-back
+            - back-bdd
+        env_file: ".env"
+        depends_on:
+            - database
+
+    backend_2:
+        build: ./java
+        container_name: backendTP1_2
         networks:
             - proxy-back
             - back-bdd
@@ -23,10 +33,20 @@ services:
         container_name: proxyTP1
         ports:
             - 80:80
+            - 8080:8080
         networks:
             - proxy-back
         depends_on:
-            - backend
+            - backend_1
+
+    front: 
+        build: ./devops-front
+        container_name: front
+        env_file: ".env"
+        networks:
+            - proxy-back
+        depends_on:
+            - backend_1
 
 networks:
     proxy-back:
